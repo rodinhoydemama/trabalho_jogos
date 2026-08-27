@@ -1,2 +1,9 @@
-# trabalho_jogos
-Nosso Trabalho de Jogos
+# Trabalho de Jogos
+
+## Estrutura:
+📁 este repo
+ ├─ 📁 jogo 
+ └─ 📁 importantes
+
+
+ 
