@@ -1,8 +1,8 @@
 # Trabalho de Jogos
 
 ## Estrutura:
-📁 este repo
- ├─ 📁 jogo 
+📁 este repo <br>
+ ├─ 📁 jogo  <br>
  └─ 📁 importantes
 
 
