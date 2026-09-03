@@ -1,9 +1,4 @@
-# Trabalho de Jogos
+# Jogos - Regras aos contribuidores:
 
-## Estrutura:
-📁 este repo <br>
- ├─ 📁 jogo  <br>
- └─ 📁 importantes
-
-
- 
+## Criar branches novas para funcionalidades a ser testada, não edite diretamente a main
+## Não Crie commits sem motivos
