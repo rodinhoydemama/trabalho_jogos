@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Variáveis públicas para ajuste no Inspector
-    public float moveSpeed = 5f; // Velocidade de movimento
-    public float jumpForce = 10f; // Força do pulo
+    public float moveSpeed = 5f; 
+    public float jumpForce = 10f; 
 
-    private Rigidbody2D rb; // Referência ao Rigidbody2D
-    private Animator animator; // Referência ao Animator
-    private SpriteRenderer spriteRenderer; // Referência ao SpriteRenderer
-    public bool isGrounded = true; // Verifica se o jogador está no chão
+    [Header("ConfiguraÃ§Ãµes do Sensor de ChÃ£o")]
+    public Transform groundCheck;    // Arraste o objeto dos pÃ©s aqui
+    public float checkRadius = 0.2f;  // Tamanho do sensor
+    public LayerMask whatIsGround;   // Selecione a Layer do chÃ£o no Inspector
 
+    private Rigidbody2D rb; 
+    private Animator animator; 
+    private SpriteRenderer spriteRenderer; 
+    public bool isGrounded; 
 
     void Start()
     {
-        // Obtém o componente Rigidbody2D do GameObject
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -24,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Esta linha substitui o OnCollisionEnter e NUNCA falha no Tilemap
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+
         UpdateAnimator();
         Movement();
         Jump();
@@ -32,7 +37,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+        float moveInput = Input.GetAxisRaw("Horizontal");
+
+        // Se moveInput for diferente de 0, significa que alguma tecla estÃ¡ sendo pressionada
+        // Usamos Mathf.Abs para transformar -1 (esquerda) em 1, garantindo que o valor seja sempre positivo
+        float inputAtivo = Mathf.Abs(moveInput);
+
+        // Envia 1 se estiver clicando e 0 se nÃ£o estiver clicando para o parÃ¢metro "Speed"
+        animator.SetFloat("Speed", inputAtivo);
+        
         animator.SetBool("IsJumping", !isGrounded);
     }
 
@@ -46,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        // Pulo
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -55,24 +67,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
-        // Movimento horizontal
-        float moveInput = Input.GetAxis("Horizontal"); // Captura entrada do teclado (A/D ou setas)
-        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+        float moveInput = Input.GetAxisRaw("Horizontal"); 
 
-        // Inverte a direção do sprite do personagem
+        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
         MirrorSprite(moveInput);
     }
 
     private void MirrorSprite(float moveInput)
     {
-        if (moveInput < 0)
-        {
-            spriteRenderer.flipX = true;
-        }
-        else if (moveInput > 0)
-        {
-            spriteRenderer.flipX = false;
-        }
+        if (moveInput < 0) spriteRenderer.flipX = true;
+        else if (moveInput > 0) spriteRenderer.flipX = false;
         MirrorChildren();
     }
 
@@ -81,33 +85,19 @@ public class PlayerMovement : MonoBehaviour
         foreach (var child in transform.GetComponentsInChildren<Transform>())
         {
             if (child == transform) continue;
-
             Quaternion newRotation = Quaternion.identity;
-
-            if (spriteRenderer.flipX)
-            {
-                newRotation = Quaternion.Euler(180f * Vector3.up);
-            }
-
+            if (spriteRenderer.flipX) newRotation = Quaternion.Euler(0f, 180f, 0f);
             child.rotation = newRotation;
         }
-
     }
 
-    // Verifica se o jogador está no chão (não é a melhor forma de fazer isso)
-    private void OnCollisionEnter2D(Collision2D collision)
+    // Desenha uma esfera vermelha na janela Scene para vocÃª ver o sensor nos pÃ©s
+    private void OnDrawGizmosSelected()
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (groundCheck != null)
         {
-            isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         }
     }
 }
