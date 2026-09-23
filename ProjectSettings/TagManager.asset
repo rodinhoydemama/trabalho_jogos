@@ -12,7 +12,7 @@ TagManager:
   - Chao
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -50,4 +50,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 407811113
+    locked: 0
+  - name: Enemy
+    uniqueID: 1412646293
     locked: 0

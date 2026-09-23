@@ -7,10 +7,30 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f; 
     public float jumpForce = 10f; 
 
-    [Header("Configurações do Sensor de Chão")]
-    public Transform groundCheck;    // Arraste o objeto dos pés aqui
-    public float checkRadius = 0.2f;  // Tamanho do sensor
-    public LayerMask whatIsGround;   // Selecione a Layer do chão no Inspector
+    public Transform groundCheck;    
+    
+    [Header("Configurações do Sensor (Caixa)")]
+    public Vector2 boxSize = new Vector2(0.4f, 0.1f); 
+    public LayerMask whatIsGround;   
+
+    [Header("Coyote time e jump buffer")]
+    [SerializeField] private float coyoteTime = 0.15f;
+    [SerializeField] private float jumpBufferTime = 0.15f;
+    private float coyoteTimeCounter;
+    private float jumpBufferCounter;
+
+    [Header("Configurações de Ataque Físico (Z)")]
+    public Transform attackPoint;      
+    public float attackRange = 0.5f;    
+    public LayerMask enemyLayers;      
+    public int attackDamage = 25;       
+
+    [Header("Ataque à Distância (Pedra - X)")]
+    public GameObject stonePrefab;     
+    public Transform throwPoint;      
+    public float throwCooldown = 0.5f; // Garanta que está com esse valor padrão
+    private float throwCooldownCounter;
+
 
     private Rigidbody2D rb; 
     private Animator animator; 
@@ -26,8 +46,25 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Esta linha substitui o OnCollisionEnter e NUNCA falha no Tilemap
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        isGrounded = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, whatIsGround);
+
+        if (isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
 
         UpdateAnimator();
         Movement();
@@ -38,32 +75,76 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateAnimator()
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
-
-        // Se moveInput for diferente de 0, significa que alguma tecla está sendo pressionada
-        // Usamos Mathf.Abs para transformar -1 (esquerda) em 1, garantindo que o valor seja sempre positivo
         float inputAtivo = Mathf.Abs(moveInput);
 
-        // Envia 1 se estiver clicando e 0 se não estiver clicando para o parâmetro "Speed"
         animator.SetFloat("Speed", inputAtivo);
-        
         animator.SetBool("IsJumping", !isGrounded);
     }
 
     private void Attack()
     {
+        if (throwCooldownCounter > 0f)
+        {
+            throwCooldownCounter -= Time.deltaTime;
+        }
+
         if (Input.GetKeyDown(KeyCode.Z))
         {
             animator.SetTrigger("Attack");
+
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                // CORRIGIDO: Procura o script no objeto atingido, no pai ou nos filhos
+                EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
+                if (enemyHealth == null) enemyHealth = enemy.GetComponentInParent<EnemyHealth>();
+                if (enemyHealth == null) enemyHealth = enemy.GetComponentInChildren<EnemyHealth>();
+                
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(attackDamage);
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.X) && throwCooldownCounter <= 0f)
+        {
+            animator.SetTrigger("Throw");
+            throwCooldownCounter = throwCooldown; 
         }
     }
 
-    private void Jump()
+
+
+    public void ThrowStone()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (stonePrefab == null || throwPoint == null) return;
+
+        GameObject newStone = Instantiate(stonePrefab, throwPoint.position, Quaternion.identity);
+        StoneProjectile projectile = newStone.GetComponent<StoneProjectile>();
+
+        if (projectile != null)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            Vector2 shootDirection = spriteRenderer.flipX ? Vector2.left : Vector2.right;
+            projectile.Launch(shootDirection);
         }
     }
+
+
+    private void Jump()
+    {
+        // Só permite o pulo se o Buffer e o Coyote Time forem maiores que zero
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
+            // TRAVA ANTI-PULO DUPLO: Zeramos IMEDIATAMENTE os contadores
+            // Isso impede que o Unity leia o comando de pulo duas vezes seguidas no ar
+            jumpBufferCounter = 0f;
+            coyoteTimeCounter = 0f;
+        }
+    }
+
 
     private void Movement()
     {
@@ -87,17 +168,22 @@ public class PlayerMovement : MonoBehaviour
             if (child == transform) continue;
             Quaternion newRotation = Quaternion.identity;
             if (spriteRenderer.flipX) newRotation = Quaternion.Euler(0f, 180f, 0f);
-            child.rotation = newRotation;
+            child.localRotation = newRotation;
         }
     }
 
-    // Desenha uma esfera vermelha na janela Scene para você ver o sensor nos pés
     private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+            Gizmos.DrawWireCube(groundCheck.position, boxSize);
+        }
+
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
         }
     }
 }
