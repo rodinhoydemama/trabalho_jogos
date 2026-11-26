@@ -33,16 +33,16 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 2
+    wrapV: 2
+    wrapW: 2
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,7 +52,7 @@ TextureImporter:
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
-  spriteTessellationDetail: -1
+  spriteTessellationDetail: 0
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
@@ -91,18 +91,196 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
-    outline: []
+    sprites:
+    - serializedVersion: 2
+      name: Dude_Monster_Run_6_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb3a1ddbc06652d46a12075d8f75add1
+      internalID: -438032955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dude_Monster_Run_6_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 421ee6df4514f8a4d8603986bc5ab98c
+      internalID: -883743518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dude_Monster_Run_6_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c19d432241e8fe44a05c6c8575db292
+      internalID: 169891316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dude_Monster_Run_6_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c862f3370ba2c874a94247939c18b9fb
+      internalID: -549878745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dude_Monster_Run_6_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac69783acd4858a4a932956d69650c23
+      internalID: 1036640890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dude_Monster_Run_6_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56942d4b2e1400349b4cbfacf414193d
+      internalID: 253929865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline:
+    - - {x: -83, y: 12}
+      - {x: -91, y: 9}
+      - {x: -91, y: -14}
+      - {x: -90, y: -16}
+      - {x: -69, y: -16}
+      - {x: -68, y: -12}
+      - {x: -68, y: 12}
+    - - {x: -55, y: 12}
+      - {x: -58, y: 10}
+      - {x: -58, y: -16}
+      - {x: -39, y: -16}
+      - {x: -36, y: -6}
+      - {x: -36, y: 11}
+      - {x: -38, y: 12}
+    - - {x: -23, y: 10}
+      - {x: -27, y: -1}
+      - {x: -27, y: -15}
+      - {x: -26, y: -16}
+      - {x: -5, y: -16}
+      - {x: -4, y: -12}
+      - {x: -4, y: 7}
+      - {x: -8, y: 10}
+    - - {x: 9, y: 12}
+      - {x: 5, y: 1}
+      - {x: 5, y: -12}
+      - {x: 11, y: -16}
+      - {x: 21, y: -16}
+      - {x: 28, y: -13}
+      - {x: 28, y: 12}
+    - - {x: 45, y: 12}
+      - {x: 38, y: 9}
+      - {x: 38, y: -9}
+      - {x: 42, y: -16}
+      - {x: 60, y: -16}
+      - {x: 60, y: 11}
+      - {x: 58, y: 12}
+    - - {x: 86, y: 10}
+      - {x: 75, y: 10}
+      - {x: 71, y: 5}
+      - {x: 70, y: -6}
+      - {x: 70, y: -12}
+      - {x: 73, y: -16}
+      - {x: 85, y: -16}
+      - {x: 90, y: -11}
+      - {x: 92, y: -5}
+      - {x: 92, y: 8}
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Dude_Monster_Run_6_0: -438032955
+      Dude_Monster_Run_6_1: -883743518
+      Dude_Monster_Run_6_2: 169891316
+      Dude_Monster_Run_6_3: -549878745
+      Dude_Monster_Run_6_4: 1036640890
+      Dude_Monster_Run_6_5: 253929865
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
